@@ -1,0 +1,6 @@
+Species	Isolates	Antibiotics	WHO_Priority	Key_Resistance_Concerns
+Salmonella enterica	9111	20	High	MDR, fluoroquinolone resistance
+Escherichia coli	5236	35	Critical	ESBL, carbapenem resistance
+Klebsiella pneumoniae	1808	26	Critical	Carbapenem resistance, colistin resistance
+Staphylococcus aureus	977	13	High	MRSA, vancomycin resistance
+Acinetobacter baumannii	757	13	Critical	Pan-drug resistance, carbapenem resistance

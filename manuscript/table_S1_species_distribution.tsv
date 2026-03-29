@@ -1,0 +1,14 @@
+Species	n	Percent	WHO_Priority	Gram
+Salmonella enterica	10070	36.2	High	-
+Escherichia coli	6665	23.9	Critical	-
+Campylobacter jejuni	2585	9.3	High	-
+Klebsiella pneumoniae	1659	6.0	Critical	-
+Campylobacter coli	1375	4.9	High	-
+Mycobacterium tuberculosis	1282	4.6	--	+
+Staphylococcus aureus	968	3.5	High	+
+Neisseria gonorrhoeae	765	2.7	High	-
+Acinetobacter baumannii	754	2.7	Critical	-
+Streptococcus pneumoniae	307	1.1	Medium	+
+Pseudomonas aeruginosa	246	0.9	Critical	-
+Corynebacterium diphtheriae	221	0.8	--	+
+Other species (18)	959	3.4	--	--
