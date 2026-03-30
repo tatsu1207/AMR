@@ -4,7 +4,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.environ.get("AMR_MODELS_DIR", os.path.join(BASE_DIR, "models"))
 UPLOAD_DIR = os.environ.get("AMR_UPLOAD_DIR", os.path.join(BASE_DIR, "uploads"))
-MAX_CONCURRENT_JOBS = int(os.environ.get("MAX_CONCURRENT_JOBS", "3"))
+MAX_CONCURRENT_JOBS = int(os.environ.get("MAX_CONCURRENT_JOBS", "5"))
 CLEANUP_HOURS = int(os.environ.get("CLEANUP_HOURS", "24"))
 MAX_FILE_SIZE_MB = int(os.environ.get("MAX_FILE_SIZE_MB", "100"))
 

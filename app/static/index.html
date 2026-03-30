@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AMR Predictor - Antimicrobial Resistance Prediction from WGS</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=5">
+    <link rel="stylesheet" href="/static/css/style.css?v=10">
 </head>
 <body>
     <header>
@@ -27,7 +27,7 @@
                     </svg>
                     <p class="drop-text">Drag and drop your FASTA file here</p>
                     <p class="drop-subtext">or</p>
-                    <label for="file-input" class="btn btn-outline">Browse Files</label>
+                    <button type="button" class="btn btn-outline" id="browse-btn">Browse Files</button>
                     <input type="file" id="file-input" accept=".fasta,.fa,.fna,.fasta.gz" multiple hidden>
                     <p class="file-info">.fasta, .fa, or .fna files up to 100 MB</p>
                 </div>
@@ -94,6 +94,6 @@
         </div>
     </footer>
 
-    <script src="/static/js/app.js?v=5"></script>
+    <script src="/static/js/app.js?v=10"></script>
 </body>
 </html>

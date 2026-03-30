@@ -15,14 +15,24 @@ from app.config import MODELS_DIR
 SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ANNOTATE_SCRIPT = os.path.join(SCRIPT_DIR, "annotate_minimal.sh")
 
+TOTAL_CORES = os.cpu_count() or 4
+MAX_THREADS_PER_JOB = 4
+_active_jobs = 0
+_active_jobs_lock = asyncio.Lock()
+
 
 async def run_pipeline(job_id: str, fasta_path: str):
     """Run the minimal annotation pipeline and predict phenotypes."""
+    global _active_jobs
     job = get_job(job_id)
     if not job:
         return
 
     job_dir = os.path.dirname(fasta_path)
+
+    async with _active_jobs_lock:
+        _active_jobs += 1
+        threads = min(MAX_THREADS_PER_JOB, max(1, TOTAL_CORES // _active_jobs))
 
     try:
         # Step 1: Validate input
@@ -33,7 +43,7 @@ async def run_pipeline(job_id: str, fasta_path: str):
         job.update(JobStage.IDENTIFYING_SPECIES)
 
         proc = await asyncio.create_subprocess_exec(
-            "bash", ANNOTATE_SCRIPT, fasta_path, job_dir, "4",
+            "bash", ANNOTATE_SCRIPT, fasta_path, job_dir, str(threads),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
@@ -104,6 +114,9 @@ async def run_pipeline(job_id: str, fasta_path: str):
     except Exception as e:
         traceback.print_exc()
         job.update(JobStage.FAILED, error=str(e))
+    finally:
+        async with _active_jobs_lock:
+            _active_jobs = max(0, _active_jobs - 1)
 
 
 def parse_amrfinderplus(tsv_path: str):

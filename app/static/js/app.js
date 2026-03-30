@@ -14,7 +14,14 @@ const dropZone = $('#drop-zone');
 const fileInput = $('#file-input');
 const analyzeBtn = $('#analyze-btn');
 
-dropZone.addEventListener('click', () => fileInput.click());
+$('#browse-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    fileInput.click();
+});
+dropZone.addEventListener('click', (e) => {
+    if (e.target.id === 'browse-btn' || e.target === fileInput) return;
+    fileInput.click();
+});
 dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
 dropZone.addEventListener('drop', (e) => {
@@ -86,17 +93,16 @@ async function startAnalysis() {
     currentJobs = [];
 
     try {
-        for (const file of selectedFiles) {
+        const uploads = selectedFiles.map(async (file) => {
             const formData = new FormData();
             formData.append('file', file);
             const resp = await fetch('/api/upload', { method: 'POST', body: formData });
             const data = await resp.json();
-            if (!resp.ok) {
-                showError(data.detail || `Upload failed for ${file.name}`);
-                return;
-            }
-            currentJobs.push({ id: data.job_id, filename: file.name, status: null, results: null });
-        }
+            if (!resp.ok) throw new Error(data.detail || `Upload failed for ${file.name}`);
+            return { id: data.job_id, filename: file.name, status: null, results: null };
+        });
+        currentJobs = await Promise.all(uploads);
+        saveSession();
 
         showSection('progress');
         renderJobList();
@@ -361,7 +367,6 @@ function buildStrainPanel(job, idx, visible) {
                             <th>Drug Class</th>
                             <th>Identity %</th>
                             <th>Coverage %</th>
-                            <th>Plasmid</th>
                         </tr>
                     </thead>
                     <tbody id="genes-tbody-${idx}"></tbody>
@@ -490,7 +495,6 @@ function renderStrainGenes(idx) {
             <td>${g.drug_class}</td>
             <td>${g.identity.toFixed(1)}</td>
             <td>${g.coverage.toFixed(1)}</td>
-            <td>${g.on_plasmid ? 'Yes' : '-'}</td>
         `;
         gtbody.appendChild(tr);
     }
@@ -540,5 +544,36 @@ function resetUI() {
     if (jobList) jobList.remove();
     const content = $('#results-content');
     if (content) content.innerHTML = '';
+    clearSession();
     showSection('upload');
 }
+
+// ── Session Persistence ─────────────────────────────────────────────
+function saveSession() {
+    const data = currentJobs.map(j => ({ id: j.id, filename: j.filename }));
+    sessionStorage.setItem('amr_jobs', JSON.stringify(data));
+}
+
+function clearSession() {
+    sessionStorage.removeItem('amr_jobs');
+}
+
+function restoreSession() {
+    const saved = sessionStorage.getItem('amr_jobs');
+    if (!saved) return;
+
+    try {
+        const jobs = JSON.parse(saved);
+        if (!jobs || jobs.length === 0) return;
+
+        currentJobs = jobs.map(j => ({ id: j.id, filename: j.filename, status: null, results: null }));
+        showSection('progress');
+        renderJobList();
+        startPolling();
+    } catch (e) {
+        clearSession();
+    }
+}
+
+// Restore on page load
+restoreSession();
