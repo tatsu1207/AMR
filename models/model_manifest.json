@@ -1,0 +1,565 @@
+{
+  "species": {
+    "Salmonella_enterica": {
+      "antibiotics": {
+        "amoxicillin_clavulanic_acid": {
+          "cv_f1": 0.895,
+          "n_samples": 9030,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ampicillin": {
+          "cv_f1": 0.962,
+          "n_samples": 10053,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefotaxime": {
+          "cv_f1": 1.0,
+          "n_samples": 406,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefoxitin": {
+          "cv_f1": 0.919,
+          "n_samples": 9210,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftazidime": {
+          "cv_f1": 0.738,
+          "n_samples": 418,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftiofur": {
+          "cv_f1": 0.966,
+          "n_samples": 4405,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftriaxone": {
+          "cv_f1": 0.965,
+          "n_samples": 8993,
+          "drug_class": "BETA-LACTAM"
+        },
+        "chloramphenicol": {
+          "cv_f1": 0.898,
+          "n_samples": 10051,
+          "drug_class": "PHENICOL"
+        },
+        "ciprofloxacin": {
+          "cv_f1": 0.947,
+          "n_samples": 9862,
+          "drug_class": "QUINOLONE"
+        },
+        "colistin": {
+          "cv_f1": 0.994,
+          "n_samples": 1301,
+          "drug_class": "COLISTIN"
+        },
+        "gentamicin": {
+          "cv_f1": 0.89,
+          "n_samples": 9902,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "kanamycin": {
+          "cv_f1": 0.825,
+          "n_samples": 3794,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "nalidixic_acid": {
+          "cv_f1": 0.978,
+          "n_samples": 9902,
+          "drug_class": "QUINOLONE"
+        },
+        "spectinomycin": {
+          "cv_f1": 0.928,
+          "n_samples": 430,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "streptomycin": {
+          "cv_f1": 0.928,
+          "n_samples": 8978,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "sulfamethoxazole": {
+          "cv_f1": 0.937,
+          "n_samples": 424,
+          "drug_class": "SULFONAMIDE"
+        },
+        "sulfisoxazole": {
+          "cv_f1": 0.975,
+          "n_samples": 8550,
+          "drug_class": "SULFONAMIDE"
+        },
+        "sulfonamides": {
+          "cv_f1": 0.965,
+          "n_samples": 920,
+          "drug_class": "SULFONAMIDE"
+        },
+        "tetracycline": {
+          "cv_f1": 0.978,
+          "n_samples": 10050,
+          "drug_class": "TETRACYCLINE"
+        },
+        "trimethoprim": {
+          "cv_f1": 0.718,
+          "n_samples": 648,
+          "drug_class": "TRIMETHOPRIM"
+        }
+      },
+      "n_features": 52
+    },
+    "Escherichia_coli": {
+      "antibiotics": {
+        "amikacin": {
+          "cv_f1": 0.887,
+          "n_samples": 1206,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "amoxicillin_clavulanic_acid": {
+          "cv_f1": 0.834,
+          "n_samples": 4457,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ampicillin": {
+          "cv_f1": 0.973,
+          "n_samples": 6450,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ampicillin_sulbactam": {
+          "cv_f1": 0.928,
+          "n_samples": 512,
+          "drug_class": "BETA-LACTAM"
+        },
+        "azithromycin": {
+          "cv_f1": 0.947,
+          "n_samples": 5314,
+          "drug_class": "MACROLIDE"
+        },
+        "aztreonam": {
+          "cv_f1": 0.921,
+          "n_samples": 263,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefazolin": {
+          "cv_f1": 0.963,
+          "n_samples": 530,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefepime": {
+          "cv_f1": 0.615,
+          "n_samples": 1044,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefotaxime": {
+          "cv_f1": 0.928,
+          "n_samples": 815,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefoxitin": {
+          "cv_f1": 0.873,
+          "n_samples": 4979,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefpirome": {
+          "cv_f1": 0.958,
+          "n_samples": 302,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftazidime": {
+          "cv_f1": 0.823,
+          "n_samples": 1373,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftiofur": {
+          "cv_f1": 0.93,
+          "n_samples": 1129,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftriaxone": {
+          "cv_f1": 0.955,
+          "n_samples": 5561,
+          "drug_class": "BETA-LACTAM"
+        },
+        "chloramphenicol": {
+          "cv_f1": 0.751,
+          "n_samples": 4460,
+          "drug_class": "PHENICOL"
+        },
+        "ciprofloxacin": {
+          "cv_f1": 0.905,
+          "n_samples": 6375,
+          "drug_class": "QUINOLONE"
+        },
+        "colistin": {
+          "cv_f1": 0.886,
+          "n_samples": 323,
+          "drug_class": "COLISTIN"
+        },
+        "doripenem": {
+          "cv_f1": 0.503,
+          "n_samples": 115,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ertapenem": {
+          "cv_f1": 0.777,
+          "n_samples": 1316,
+          "drug_class": "BETA-LACTAM"
+        },
+        "gentamicin": {
+          "cv_f1": 0.906,
+          "n_samples": 6072,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "imipenem": {
+          "cv_f1": 0.706,
+          "n_samples": 573,
+          "drug_class": "BETA-LACTAM"
+        },
+        "kanamycin": {
+          "cv_f1": 0.918,
+          "n_samples": 1130,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "levofloxacin": {
+          "cv_f1": 0.937,
+          "n_samples": 1049,
+          "drug_class": "QUINOLONE"
+        },
+        "nalidixic_acid": {
+          "cv_f1": 0.897,
+          "n_samples": 4452,
+          "drug_class": "QUINOLONE"
+        },
+        "nitrofurantoin": {
+          "cv_f1": 0.073,
+          "n_samples": 405,
+          "drug_class": "NITROFURANTOIN"
+        },
+        "piperacillin_tazobactam": {
+          "cv_f1": 0.473,
+          "n_samples": 686,
+          "drug_class": "BETA-LACTAM"
+        },
+        "streptomycin": {
+          "cv_f1": 0.927,
+          "n_samples": 4230,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "sulfamethoxazole": {
+          "cv_f1": 0.955,
+          "n_samples": 191,
+          "drug_class": "SULFONAMIDE"
+        },
+        "sulfisoxazole": {
+          "cv_f1": 0.98,
+          "n_samples": 3863,
+          "drug_class": "SULFONAMIDE"
+        },
+        "sulfonamides": {
+          "cv_f1": 0.97,
+          "n_samples": 1327,
+          "drug_class": "SULFONAMIDE"
+        },
+        "temocillin": {
+          "cv_f1": 0.958,
+          "n_samples": 302,
+          "drug_class": "BETA-LACTAM"
+        },
+        "tetracycline": {
+          "cv_f1": 0.967,
+          "n_samples": 5072,
+          "drug_class": "TETRACYCLINE"
+        },
+        "tobramycin": {
+          "cv_f1": 0.925,
+          "n_samples": 1299,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "trimethoprim": {
+          "cv_f1": 0.989,
+          "n_samples": 1522,
+          "drug_class": "TRIMETHOPRIM"
+        },
+        "trimethoprim_sulfamethoxazole": {
+          "cv_f1": 0.926,
+          "n_samples": 4995,
+          "drug_class": "TRIMETHOPRIM"
+        }
+      },
+      "n_features": 52
+    },
+    "Klebsiella_pneumoniae": {
+      "antibiotics": {
+        "amikacin": {
+          "cv_f1": 0.786,
+          "n_samples": 783,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "amoxicillin_clavulanic_acid": {
+          "cv_f1": 0.907,
+          "n_samples": 797,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ampicillin_sulbactam": {
+          "cv_f1": 0.963,
+          "n_samples": 243,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefepime": {
+          "cv_f1": 0.838,
+          "n_samples": 682,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefotaxime": {
+          "cv_f1": 0.983,
+          "n_samples": 604,
+          "drug_class": "BETA-LACTAM"
+        },
+        "cefoxitin": {
+          "cv_f1": 0.884,
+          "n_samples": 566,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftazidime": {
+          "cv_f1": 0.912,
+          "n_samples": 1312,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftazidime_avibactam": {
+          "cv_f1": 0.803,
+          "n_samples": 238,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftriaxone": {
+          "cv_f1": 0.929,
+          "n_samples": 1051,
+          "drug_class": "BETA-LACTAM"
+        },
+        "chloramphenicol": {
+          "cv_f1": 0.96,
+          "n_samples": 116,
+          "drug_class": "PHENICOL"
+        },
+        "ciprofloxacin": {
+          "cv_f1": 0.951,
+          "n_samples": 887,
+          "drug_class": "QUINOLONE"
+        },
+        "colistin": {
+          "cv_f1": 0.895,
+          "n_samples": 471,
+          "drug_class": "COLISTIN"
+        },
+        "doripenem": {
+          "cv_f1": 0.906,
+          "n_samples": 293,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ertapenem": {
+          "cv_f1": 0.907,
+          "n_samples": 684,
+          "drug_class": "BETA-LACTAM"
+        },
+        "fosfomycin": {
+          "cv_f1": 0.665,
+          "n_samples": 104,
+          "drug_class": "FOSFOMYCIN"
+        },
+        "gentamicin": {
+          "cv_f1": 0.886,
+          "n_samples": 788,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "imipenem": {
+          "cv_f1": 0.928,
+          "n_samples": 632,
+          "drug_class": "BETA-LACTAM"
+        },
+        "levofloxacin": {
+          "cv_f1": 0.919,
+          "n_samples": 652,
+          "drug_class": "QUINOLONE"
+        },
+        "meropenem": {
+          "cv_f1": 0.897,
+          "n_samples": 817,
+          "drug_class": "BETA-LACTAM"
+        },
+        "minocycline": {
+          "cv_f1": 0.776,
+          "n_samples": 80,
+          "drug_class": "TETRACYCLINE"
+        },
+        "nitrofurantoin": {
+          "cv_f1": 0.878,
+          "n_samples": 220,
+          "drug_class": "NITROFURANTOIN"
+        },
+        "piperacillin_tazobactam": {
+          "cv_f1": 0.828,
+          "n_samples": 1073,
+          "drug_class": "BETA-LACTAM"
+        },
+        "tetracycline": {
+          "cv_f1": 0.754,
+          "n_samples": 576,
+          "drug_class": "TETRACYCLINE"
+        },
+        "tigecycline": {
+          "cv_f1": 0.48,
+          "n_samples": 410,
+          "drug_class": "TETRACYCLINE"
+        },
+        "tobramycin": {
+          "cv_f1": 0.955,
+          "n_samples": 677,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "trimethoprim_sulfamethoxazole": {
+          "cv_f1": 0.92,
+          "n_samples": 884,
+          "drug_class": "TRIMETHOPRIM"
+        }
+      },
+      "n_features": 52
+    },
+    "Staphylococcus_aureus": {
+      "antibiotics": {
+        "ciprofloxacin": {
+          "cv_f1": 0.947,
+          "n_samples": 480,
+          "drug_class": "QUINOLONE"
+        },
+        "clindamycin": {
+          "cv_f1": 0.914,
+          "n_samples": 709,
+          "drug_class": "LINCOSAMIDE"
+        },
+        "doxycycline": {
+          "cv_f1": 0.62,
+          "n_samples": 106,
+          "drug_class": "TETRACYCLINE"
+        },
+        "erythromycin": {
+          "cv_f1": 0.936,
+          "n_samples": 749,
+          "drug_class": "MACROLIDE"
+        },
+        "gentamicin": {
+          "cv_f1": 0.764,
+          "n_samples": 583,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "levofloxacin": {
+          "cv_f1": 0.983,
+          "n_samples": 442,
+          "drug_class": "QUINOLONE"
+        },
+        "linezolid": {
+          "cv_f1": 0.571,
+          "n_samples": 531,
+          "drug_class": "OXAZOLIDINONE"
+        },
+        "mupirocin": {
+          "cv_f1": 0.725,
+          "n_samples": 345,
+          "drug_class": "MUPIROCIN"
+        },
+        "oxacillin": {
+          "cv_f1": 0.893,
+          "n_samples": 721,
+          "drug_class": "BETA-LACTAM"
+        },
+        "penicillin": {
+          "cv_f1": 0.971,
+          "n_samples": 384,
+          "drug_class": "BETA-LACTAM"
+        },
+        "tetracycline": {
+          "cv_f1": 0.831,
+          "n_samples": 765,
+          "drug_class": "TETRACYCLINE"
+        },
+        "trimethoprim_sulfamethoxazole": {
+          "cv_f1": 0.706,
+          "n_samples": 657,
+          "drug_class": "TRIMETHOPRIM"
+        },
+        "vancomycin": {
+          "cv_f1": 0.776,
+          "n_samples": 580,
+          "drug_class": "GLYCOPEPTIDE"
+        }
+      },
+      "n_features": 52
+    },
+    "Acinetobacter_baumannii": {
+      "antibiotics": {
+        "amikacin": {
+          "cv_f1": 0.944,
+          "n_samples": 702,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "ampicillin_sulbactam": {
+          "cv_f1": 0.89,
+          "n_samples": 693,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftazidime": {
+          "cv_f1": 0.969,
+          "n_samples": 728,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ceftriaxone": {
+          "cv_f1": 0.968,
+          "n_samples": 727,
+          "drug_class": "BETA-LACTAM"
+        },
+        "ciprofloxacin": {
+          "cv_f1": 0.992,
+          "n_samples": 754,
+          "drug_class": "QUINOLONE"
+        },
+        "doripenem": {
+          "cv_f1": 0.914,
+          "n_samples": 187,
+          "drug_class": "BETA-LACTAM"
+        },
+        "gentamicin": {
+          "cv_f1": 0.983,
+          "n_samples": 751,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "imipenem": {
+          "cv_f1": 0.864,
+          "n_samples": 709,
+          "drug_class": "BETA-LACTAM"
+        },
+        "levofloxacin": {
+          "cv_f1": 0.957,
+          "n_samples": 713,
+          "drug_class": "QUINOLONE"
+        },
+        "meropenem": {
+          "cv_f1": 0.886,
+          "n_samples": 378,
+          "drug_class": "BETA-LACTAM"
+        },
+        "tetracycline": {
+          "cv_f1": 0.958,
+          "n_samples": 739,
+          "drug_class": "TETRACYCLINE"
+        },
+        "tobramycin": {
+          "cv_f1": 0.926,
+          "n_samples": 719,
+          "drug_class": "AMINOGLYCOSIDE"
+        },
+        "trimethoprim_sulfamethoxazole": {
+          "cv_f1": 0.919,
+          "n_samples": 731,
+          "drug_class": "TRIMETHOPRIM"
+        }
+      },
+      "n_features": 53
+    }
+  },
+  "total_models": 107
+}

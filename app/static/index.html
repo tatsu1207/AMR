@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMR Predictor - Antimicrobial Resistance Prediction from WGS</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=5">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>AMR Predictor</h1>
+            <p class="subtitle">Antimicrobial resistance phenotype prediction from whole-genome sequencing</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Upload Section -->
+        <section id="upload-section" class="card">
+            <h2>Upload Assembled Genome</h2>
+            <p class="info-text">Upload a <strong>de novo assembled</strong> bacterial genome in FASTA format. The system will identify the species, annotate resistance genes, and predict antimicrobial susceptibility phenotypes.</p>
+
+            <div id="drop-zone" class="drop-zone">
+                <div class="drop-zone-content">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5">
+                        <path d="M12 16V4m0 0L8 8m4-4l4 4M4 17v2a1 1 0 001 1h14a1 1 0 001-1v-2"/>
+                    </svg>
+                    <p class="drop-text">Drag and drop your FASTA file here</p>
+                    <p class="drop-subtext">or</p>
+                    <label for="file-input" class="btn btn-outline">Browse Files</label>
+                    <input type="file" id="file-input" accept=".fasta,.fa,.fna,.fasta.gz" multiple hidden>
+                    <p class="file-info">.fasta, .fa, or .fna files up to 100 MB</p>
+                </div>
+            </div>
+
+            <div id="file-selected" class="file-selected hidden">
+                <div class="file-name-row">
+                    <span id="selected-filecount" class="filecount"></span>
+                    <span id="selected-filesize" class="filesize"></span>
+                    <button id="clear-file" class="btn-icon" title="Remove files">&times;</button>
+                </div>
+                <ul id="selected-filelist" class="filelist"></ul>
+            </div>
+
+            <button id="analyze-btn" class="btn btn-primary" disabled>Analyze Genome</button>
+
+            <div class="supported-species">
+                <h3>Supported Species</h3>
+                <div class="species-tags">
+                    <span class="tag"><em>Salmonella enterica</em></span>
+                    <span class="tag"><em>Escherichia coli</em></span>
+                    <span class="tag"><em>Klebsiella pneumoniae</em></span>
+                    <span class="tag"><em>Staphylococcus aureus</em></span>
+                    <span class="tag"><em>Acinetobacter baumannii</em></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progress-section" class="card hidden">
+            <h2>Analysis in Progress</h2>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <p id="progress-label" class="progress-label">Queued...</p>
+                <p id="progress-detail" class="progress-detail"></p>
+            </div>
+            <div class="progress-steps">
+                <div class="step" data-stage="identifying_species">Species ID</div>
+                <div class="step" data-stage="detecting_genes">Gene Detection</div>
+                <div class="step" data-stage="analyzing_expression">Expression</div>
+                <div class="step" data-stage="detecting_mutations">Mutations</div>
+                <div class="step" data-stage="running_predictions">Prediction</div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="card hidden">
+            <div id="results-content"></div>
+        </section>
+
+        <!-- Error Section -->
+        <section id="error-section" class="card card-error hidden">
+            <h2>Analysis Failed</h2>
+            <p id="error-message" class="error-message"></p>
+            <button id="retry-btn" class="btn btn-primary">Try Again</button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>AMR Predictor v1.0 | <a href="https://github.com/tatsu1207/AMR" target="_blank">GitHub</a> | For research use</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js?v=5"></script>
+</body>
+</html>

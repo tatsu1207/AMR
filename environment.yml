@@ -1,0 +1,22 @@
+name: amr
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - python=3.10
+  - ncbi-amrfinderplus>=4.0
+  - mlst
+  - prodigal
+  - blast
+  - biopython
+  - pip
+  - pip:
+    - fastapi
+    - uvicorn[standard]
+    - python-multipart
+    - scikit-learn
+    - pandas
+    - numpy
+    - joblib
+    - resfinder
+    - ostir

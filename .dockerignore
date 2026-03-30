@@ -1,0 +1,13 @@
+__pycache__
+*.pyc
+uploads/
+uvicorn.log
+.git
+.gitignore
+manuscript/
+*.md
+train_models.py
+build_feature_matrix.py
+regen_summary_fast.py
+annotate_one.sh
+substrate_mapping.py
