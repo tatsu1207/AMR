@@ -2,11 +2,14 @@ FROM mambaorg/micromamba:1.5-jammy
 
 USER root
 
-# Install 32-bit libs for BPROM (32-bit x86 ELF binary) and utilities
-RUN dpkg --add-architecture i386 && \
-    apt-get update && apt-get install -y --no-install-recommends \
-    libc6:i386 libgcc-s1:i386 \
-    wget curl git procps && \
+# Install utilities; on x86, also install 32-bit libs for BPROM
+ARG TARGETARCH
+RUN apt-get update && \
+    if [ "$TARGETARCH" = "amd64" ]; then \
+        dpkg --add-architecture i386 && apt-get update && \
+        apt-get install -y --no-install-recommends libc6:i386 libgcc-s1:i386; \
+    fi && \
+    apt-get install -y --no-install-recommends wget curl git procps && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy environment definition and create conda env
@@ -40,8 +43,9 @@ COPY annotate_minimal.sh .
 COPY scripts/ scripts/
 COPY run.sh .
 
-# Make scripts and binaries executable
-RUN chmod +x annotate_minimal.sh run.sh bin/bprom
+# Make scripts executable; BPROM binary only works on x86
+RUN chmod +x annotate_minimal.sh run.sh && \
+    if [ "$TARGETARCH" = "amd64" ]; then chmod +x bin/bprom; fi
 
 # Create upload directory
 RUN mkdir -p uploads
