@@ -64,7 +64,7 @@ echo "[$(date +%H:%M:%S)] Starting minimal annotation for $SAMPLE_ID"
 # ════════════════════════════════════════════════════════════════════════
 MLST_TSV="${OUTPUT_DIR}/mlst_results.tsv"
 if [[ ! -s "$MLST_TSV" ]]; then
-    echo "[$(date +%H:%M:%S)] Step 1/7: MLST"
+    echo "[$(date +%H:%M:%S)] Step 1/6: MLST"
     $MLST_BIN "$ASSEMBLY" > "$MLST_TSV" 2>/dev/null || true
 fi
 
@@ -73,24 +73,28 @@ MLST_SCHEME=$(awk -F'\t' '{print $2}' "$MLST_TSV" 2>/dev/null || echo "unknown")
 MLST_ST=$(awk -F'\t' '{print $3}' "$MLST_TSV" 2>/dev/null || echo "unknown")
 echo "  Species scheme: $MLST_SCHEME, ST: $MLST_ST"
 
-# Map MLST scheme to PointFinder species
-PF_SPECIES=""
+# Map MLST scheme to AMRFinderPlus organism name (for point mutation detection)
+AMR_ORGANISM=""
 case "$MLST_SCHEME" in
-    ecoli*) PF_SPECIES="escherichia_coli" ;;
-    senterica*) PF_SPECIES="salmonella" ;;
-    saureus*) PF_SPECIES="staphylococcus_aureus" ;;
-    klebsiella*|kpneumoniae*) PF_SPECIES="klebsiella" ;;
-    abaumannii*) PF_SPECIES="" ;;  # No PointFinder DB
+    ecoli*) AMR_ORGANISM="Escherichia" ;;
+    senterica*) AMR_ORGANISM="Salmonella" ;;
+    saureus*) AMR_ORGANISM="Staphylococcus_aureus" ;;
+    klebsiella*|kpneumoniae*) AMR_ORGANISM="Klebsiella_pneumoniae" ;;
+    abaumannii*) AMR_ORGANISM="Acinetobacter_baumannii" ;;
 esac
 
 # ════════════════════════════════════════════════════════════════════════
-# Step 2: AMRFinderPlus (ARG detection)
+# Step 2: AMRFinderPlus (ARG detection + point mutations)
 # ════════════════════════════════════════════════════════════════════════
 AMR_TSV="${OUTPUT_DIR}/amrfinderplus.tsv"
+AMR_MUTATIONS="${OUTPUT_DIR}/amrfinder_mutations.tsv"
 if [[ ! -s "$AMR_TSV" ]]; then
-    echo "[$(date +%H:%M:%S)] Step 2/7: AMRFinderPlus"
-    $AMRFINDER -n "$ASSEMBLY" -o "$AMR_TSV" --plus \
-        --threads "$THREADS" >> "${OUTPUT_DIR}/amrfinder.log" 2>&1 || true
+    echo "[$(date +%H:%M:%S)] Step 2/6: AMRFinderPlus"
+    AMR_ARGS=(-n "$ASSEMBLY" -o "$AMR_TSV" --plus --threads "$THREADS")
+    if [[ -n "$AMR_ORGANISM" ]]; then
+        AMR_ARGS+=(--organism "$AMR_ORGANISM" --mutation_all "$AMR_MUTATIONS")
+    fi
+    $AMRFINDER "${AMR_ARGS[@]}" >> "${OUTPUT_DIR}/amrfinder.log" 2>&1 || true
 fi
 
 # ════════════════════════════════════════════════════════════════════════
@@ -99,68 +103,19 @@ fi
 GENES_GFF="${OUTPUT_DIR}/genes.gff"
 GENES_FNA="${OUTPUT_DIR}/genes.fna"
 if [[ ! -s "$GENES_FNA" ]]; then
-    echo "[$(date +%H:%M:%S)] Step 3/7: Prodigal"
+    echo "[$(date +%H:%M:%S)] Step 3/6: Prodigal"
     $PRODIGAL -i "$ASSEMBLY" -o "$GENES_GFF" -f gff \
         -d "$GENES_FNA" -p meta -q >> "${OUTPUT_DIR}/prodigal.log" 2>&1 || true
 fi
 
 # ════════════════════════════════════════════════════════════════════════
-# Step 4: PointFinder (chromosomal point mutations)
-# ════════════════════════════════════════════════════════════════════════
-PF_DIR="${OUTPUT_DIR}/pointfinder"
-PF_TSV="${PF_DIR}/PointFinder_results.txt"
-mkdir -p "$PF_DIR"
-
-if [[ ! -f "$PF_TSV" ]] && [[ -n "$PF_SPECIES" ]] && [[ -d "$POINTFINDER_DB" ]]; then
-    echo "[$(date +%H:%M:%S)] Step 4/7: PointFinder ($PF_SPECIES)"
-    "${CONDA_BIN}/python3" -m resfinder -ifa "$ASSEMBLY" -o "$PF_DIR" \
-        -c -db_point "$POINTFINDER_DB" -s "$PF_SPECIES" \
-        -db_res "$RESFINDER_DB" \
-        --ignore_missing_species >> "${PF_DIR}/pointfinder.log" 2>&1 || true
-fi
-
-# A. baumannii: custom gyrA Ser83Leu detection
-GYRA_JSON="${OUTPUT_DIR}/abaumannii_gyra.json"
-if [[ "$MLST_SCHEME" == abaumannii* ]] && [[ ! -f "$GYRA_JSON" ]]; then
-    echo "[$(date +%H:%M:%S)] Step 4/7: Custom gyrA Ser83Leu detection (A. baumannii)"
-    python3 - "$ASSEMBLY" "$GYRA_JSON" <<'PYEOF'
-import sys, subprocess, json, os
-fasta, out_json = sys.argv[1], sys.argv[2]
-query = ">gyrA_ref\nMSDLAREITPVNIEEELKNSYLDYAMSVIVGRALPDVRDGLKPVHRRVLYAMN\n"
-qf = out_json + ".query.faa"
-with open(qf, 'w') as f: f.write(query)
-try:
-    r = subprocess.run(["tblastn", "-query", qf, "-subject", fasta,
-        "-outfmt", "6 qstart qend qseq sseq pident",
-        "-evalue", "1e-20", "-max_target_seqs", "1", "-max_hsps", "1"],
-        capture_output=True, text=True, timeout=60)
-    result = {'has_gyrA_Ser83Leu': 0}
-    if r.stdout.strip():
-        parts = r.stdout.strip().split('\n')[0].split('\t')
-        if len(parts) >= 5 and float(parts[4]) > 60:
-            qstart = int(parts[0])
-            ref_pos = qstart
-            for a, b in zip(parts[2], parts[3]):
-                if a != '-':
-                    if ref_pos == 85 and b == 'L':
-                        result['has_gyrA_Ser83Leu'] = 1
-                    ref_pos += 1
-    with open(out_json, 'w') as f: json.dump(result, f)
-except: pass
-finally:
-    try: os.remove(qf)
-    except: pass
-PYEOF
-fi
-
-# ════════════════════════════════════════════════════════════════════════
-# Steps 5-7: Promoter (BPROM), RBS (OSTIR), and genomic features
+# Steps 4-6: Promoter (BPROM), RBS (OSTIR), and genomic features
 # All computed per-ARG in a single Python pass
 # ════════════════════════════════════════════════════════════════════════
 SUMMARY="${OUTPUT_DIR}/arg_context_summary.tsv"
 if [[ ! -f "$SUMMARY" ]]; then
-    echo "[$(date +%H:%M:%S)] Steps 5-7/7: Promoter + RBS + Genomic features"
-    python3 - "$ASSEMBLY" "$AMR_TSV" "$GENES_FNA" "$GENES_GFF" "$PF_TSV" "$MLST_SCHEME" "$MLST_ST" "$SUMMARY" "$GYRA_JSON" <<'PYEOF'
+    echo "[$(date +%H:%M:%S)] Steps 4-6/6: Promoter + RBS + Genomic features"
+    python3 - "$ASSEMBLY" "$AMR_TSV" "$GENES_FNA" "$GENES_GFF" "$AMR_MUTATIONS" "$MLST_SCHEME" "$MLST_ST" "$SUMMARY" <<'PYEOF'
 import sys, os, csv, json, subprocess, re, math
 from collections import defaultdict
 from Bio import SeqIO
@@ -170,11 +125,10 @@ assembly_path = sys.argv[1]
 amr_tsv = sys.argv[2]
 genes_fna = sys.argv[3]
 genes_gff = sys.argv[4]
-pf_tsv = sys.argv[5]
+amr_mutations_tsv = sys.argv[5]
 mlst_scheme = sys.argv[6]
 mlst_st = sys.argv[7]
 output_tsv = sys.argv[8]
-gyra_json = sys.argv[9] if len(sys.argv) > 9 else ""
 
 BPROM = os.environ.get("BPROM", "bprom")
 OSTIR_BIN = os.environ.get("OSTIR_BIN", "ostir")
@@ -338,13 +292,17 @@ if os.path.exists(amr_tsv):
                 'strand': strand, 'identity': identity, 'coverage': coverage,
             })
 
-# ── Load PointFinder results ──
+# ── Load point mutations from AMRFinderPlus --mutation_all output ──
 point_mutations = []
-if os.path.exists(pf_tsv):
-    with open(pf_tsv) as f:
+if os.path.exists(amr_mutations_tsv):
+    with open(amr_mutations_tsv) as f:
         reader = csv.DictReader(f, delimiter='\t')
         for row in reader:
-            point_mutations.append(row.get('Mutation', ''))
+            subtype = row.get('Subtype', '')
+            element = row.get('Element symbol', '')
+            # Skip wildtype entries, only keep actual mutations
+            if subtype == 'POINT' and 'WILDTYPE' not in row.get('Element name', ''):
+                point_mutations.append(element)
 
 # ── Process each ARG: promoter, RBS, CAI, GC ──
 rows = []

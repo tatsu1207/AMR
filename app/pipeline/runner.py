@@ -131,8 +131,14 @@ def parse_amrfinderplus(tsv_path: str):
             gene = row.get('Element symbol', '')
             drug_class = row.get('Class', row.get('Subclass', ''))
             etype = row.get('Type', '')
+            subtype = row.get('Subtype', '')
             identity = float(row.get('% Identity to reference', 0))
             coverage = float(row.get('% Coverage of reference', 0))
+
+            # Point mutations detected by AMRFinder --organism
+            if subtype == 'POINT':
+                results['mutations'].append(gene)
+                continue
 
             if etype in ('AMR', 'STRESS', 'VIRULENCE') or 'AMR' in str(etype):
                 gene_info = {

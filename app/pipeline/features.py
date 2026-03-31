@@ -35,36 +35,32 @@ def extract_features(job_dir: str, species: str, mlst_st: str) -> dict:
             if k not in features:
                 features[k] = v
 
-    # 4. Load PointFinder results
-    pf_path = os.path.join(job_dir, "pointfinder", "PointFinder_results.txt")
-    if os.path.exists(pf_path):
-        pf_features = parse_pointfinder_results(pf_path)
-        features.update(pf_features)
+    # 4. Load point mutations from AMRFinderPlus (--organism --mutation_all)
+    # First check AMRFinder main output for POINT type entries
+    amr_mut_path = os.path.join(job_dir, "amrfinder_mutations.tsv")
+    if os.path.exists(amr_mut_path):
+        mut_features = parse_amrfinder_mutations(amr_mut_path)
+        features.update(mut_features)
     else:
-        features['target_has_point_mutation'] = 0
-        features['genome_has_point_mutation'] = 0
-        features['pf_has_gyrA'] = 0
-        features['pf_has_parC'] = 0
-        features['pf_has_parE'] = 0
-        features['pf_has_gyrB'] = 0
-        features['pf_has_ampC_promoter'] = 0
-        features['pf_n_mutations'] = 0
-        features['pf_has_quinolone_mutation'] = 0
-        features['pf_n_quinolone_mutations'] = 0
+        # Fallback: check old PointFinder results for backward compatibility
+        pf_path = os.path.join(job_dir, "pointfinder", "PointFinder_results.txt")
+        if os.path.exists(pf_path):
+            pf_features = parse_pointfinder_results(pf_path)
+            features.update(pf_features)
+        else:
+            features['target_has_point_mutation'] = 0
+            features['genome_has_point_mutation'] = 0
+            features['pf_has_gyrA'] = 0
+            features['pf_has_parC'] = 0
+            features['pf_has_parE'] = 0
+            features['pf_has_gyrB'] = 0
+            features['pf_has_ampC_promoter'] = 0
+            features['pf_n_mutations'] = 0
+            features['pf_has_quinolone_mutation'] = 0
+            features['pf_n_quinolone_mutations'] = 0
+            features['pf_has_gyrA_Ser83Leu'] = 0
 
-    # 5. A. baumannii custom gyrA
-    gyra_path = os.path.join(job_dir, "abaumannii_gyra.json")
-    if os.path.exists(gyra_path):
-        with open(gyra_path) as f:
-            gyra = json.load(f)
-        features['pf_has_gyrA_Ser83Leu'] = gyra.get('has_gyrA_Ser83Leu', 0)
-        if gyra.get('has_gyrA_Ser83Leu', 0):
-            features['pf_has_gyrA'] = 1
-            features['pf_has_quinolone_mutation'] = 1
-            features['pf_n_quinolone_mutations'] = max(features.get('pf_n_quinolone_mutations', 0), 1)
-            features['genome_has_point_mutation'] = 1
-
-    # 6. MLST features
+    # 5. MLST features
     features['mlst_st'] = mlst_st
     # ST one-hot features will be added by the prediction step using model metadata
 
@@ -147,6 +143,66 @@ def parse_arg_summary(summary_path: str) -> dict:
     low_prom = sum(1 for r in rows if safe_float(r.get('promoter_ldf')) is None)
     features['arg_low_rbs'] = 1 if low_rbs > 0 else 0
     features['arg_low_promoter'] = 1 if low_prom > 0 else 0
+
+    return features
+
+
+def parse_amrfinder_mutations(mut_path: str) -> dict:
+    """Parse AMRFinderPlus --mutation_all output into feature dict."""
+    features = {
+        'target_has_point_mutation': 0,
+        'genome_has_point_mutation': 0,
+        'pf_has_gyrA': 0,
+        'pf_has_parC': 0,
+        'pf_has_parE': 0,
+        'pf_has_gyrB': 0,
+        'pf_has_ampC_promoter': 0,
+        'pf_n_mutations': 0,
+        'pf_has_quinolone_mutation': 0,
+        'pf_n_quinolone_mutations': 0,
+        'pf_has_gyrA_Ser83Leu': 0,
+    }
+
+    try:
+        with open(mut_path) as f:
+            reader = csv.DictReader(f, delimiter='\t')
+            for row in reader:
+                element = row.get('Element symbol', '').lower()
+                name = row.get('Element name', '')
+                subtype = row.get('Subtype', '')
+                drug_class = row.get('Class', '').upper()
+
+                # Skip wildtype entries
+                if 'WILDTYPE' in name:
+                    continue
+                if subtype != 'POINT':
+                    continue
+
+                features['pf_n_mutations'] += 1
+                features['genome_has_point_mutation'] = 1
+                features['target_has_point_mutation'] = 1
+
+                if 'gyra' in element:
+                    features['pf_has_gyrA'] = 1
+                    if 'QUINOLONE' in drug_class or 'NALIDIXIC' in drug_class:
+                        features['pf_has_quinolone_mutation'] = 1
+                        features['pf_n_quinolone_mutations'] += 1
+                    # Check for specific Ser83Leu (gyrA_S83L)
+                    if 's83l' in element:
+                        features['pf_has_gyrA_Ser83Leu'] = 1
+                elif 'parc' in element:
+                    features['pf_has_parC'] = 1
+                    if 'QUINOLONE' in drug_class or 'NALIDIXIC' in drug_class:
+                        features['pf_has_quinolone_mutation'] = 1
+                        features['pf_n_quinolone_mutations'] += 1
+                elif 'pare' in element:
+                    features['pf_has_parE'] = 1
+                elif 'gyrb' in element:
+                    features['pf_has_gyrB'] = 1
+                elif 'ampc' in element or 'promoter' in element:
+                    features['pf_has_ampC_promoter'] = 1
+    except Exception:
+        pass
 
     return features
 
