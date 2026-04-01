@@ -39,9 +39,43 @@ async def run_pipeline(job_id: str, fasta_path: str):
         job.update(JobStage.VALIDATING)
         validate_fasta(fasta_path)
 
-        # Step 2-6: Run annotate_minimal.sh (MLST + AMRFinderPlus + Prodigal + PointFinder + BPROM + OSTIR + genomic features)
+        # Step 2: Run MLST to identify species (fail fast if unsupported)
         job.update(JobStage.IDENTIFYING_SPECIES)
 
+        # Handle gzipped input
+        assembly_path = fasta_path
+        if fasta_path.endswith('.gz'):
+            import gzip, shutil
+            assembly_path = os.path.join(job_dir, "assembly.fasta")
+            with gzip.open(fasta_path, 'rb') as f_in, open(assembly_path, 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+
+        mlst_path = os.path.join(job_dir, "mlst_results.tsv")
+        mlst_proc = await asyncio.create_subprocess_exec(
+            "mlst", assembly_path,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        mlst_stdout, _ = await mlst_proc.communicate()
+        with open(mlst_path, 'w') as f:
+            f.write(mlst_stdout.decode())
+
+        species, mlst_st = parse_mlst(mlst_path)
+        if not species:
+            job.update(JobStage.FAILED,
+                       error="Unsupported or unrecognized species. "
+                             "Supported: Salmonella enterica, Escherichia coli, "
+                             "Klebsiella pneumoniae, Staphylococcus aureus, "
+                             "Acinetobacter baumannii.")
+            return
+
+        from app.config import SPECIES_DISPLAY
+        job.update(JobStage.IDENTIFYING_SPECIES,
+                   species=SPECIES_DISPLAY.get(species, species),
+                   mlst_st=mlst_st)
+
+        # Step 3-6: Run annotate_minimal.sh (AMRFinderPlus + Prodigal + BPROM + OSTIR + genomic features)
+        # MLST step will be skipped since mlst_results.tsv already exists
         proc = await asyncio.create_subprocess_exec(
             "bash", ANNOTATE_SCRIPT, fasta_path, job_dir, str(threads),
             stdout=asyncio.subprocess.PIPE,
@@ -54,21 +88,8 @@ async def run_pipeline(job_id: str, fasta_path: str):
             if not line:
                 break
             text = line.decode().strip()
-            if "Step 1" in text or "MLST" in text:
-                job.update(JobStage.IDENTIFYING_SPECIES)
-            elif "Step 2" in text or "AMRFinder" in text:
+            if "Step 2" in text or "AMRFinder" in text:
                 job.update(JobStage.DETECTING_GENES)
-                # Parse species from MLST
-                if "Species scheme:" in text:
-                    parts = text.split("Species scheme:")[1].strip()
-                    scheme = parts.split(",")[0].strip()
-                    st = parts.split("ST:")[1].strip() if "ST:" in parts else "unknown"
-                    from app.config import MLST_SCHEME_MAP, SPECIES_DISPLAY
-                    species = MLST_SCHEME_MAP.get(scheme.lower())
-                    if species:
-                        job.update(JobStage.DETECTING_GENES,
-                                   species=SPECIES_DISPLAY.get(species, species),
-                                   mlst_st=st)
             elif "Step 3" in text or "Prodigal" in text:
                 job.update(JobStage.PREDICTING_STRUCTURE)
             elif "Step 4" in text or "PointFinder" in text:
@@ -86,18 +107,6 @@ async def run_pipeline(job_id: str, fasta_path: str):
             stderr_out = (await proc.stderr.read()).decode()
             job.update(JobStage.FAILED,
                        error=f"Annotation pipeline failed. {stderr_out[:500]}")
-            return
-
-        # Determine species from MLST results
-        mlst_path = os.path.join(job_dir, "mlst_results.tsv")
-        species, mlst_st = parse_mlst(mlst_path)
-
-        if not species:
-            job.update(JobStage.FAILED,
-                       error="Unsupported or unrecognized species. "
-                             "Supported: Salmonella enterica, Escherichia coli, "
-                             "Klebsiella pneumoniae, Staphylococcus aureus, "
-                             "Acinetobacter baumannii.")
             return
 
         job.update(JobStage.RUNNING_PREDICTIONS, species=species, mlst_st=mlst_st)
