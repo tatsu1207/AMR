@@ -145,6 +145,12 @@ function startPolling() {
             for (const job of currentJobs) {
                 if (job.status && (job.status.stage === 'complete' || job.status.stage === 'failed')) continue;
                 const resp = await fetch(`/api/job/${job.id}`);
+                if (resp.status === 404) {
+                    clearSession();
+                    clearInterval(pollTimer);
+                    showSection('upload');
+                    return;
+                }
                 job.status = await resp.json();
                 if (job.status.stage === 'failed') { anyFailed = true; failMsg = job.status.error; }
                 if (job.status.stage !== 'complete' && job.status.stage !== 'failed') allDone = false;

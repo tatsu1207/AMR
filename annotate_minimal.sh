@@ -17,8 +17,10 @@ THREADS="${3:-4}"
 
 # ── Tool paths (use conda env PATH by default) ──
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-# Detect conda env bin directory
-if [[ -n "${CONDA_PREFIX:-}" ]]; then
+# Detect conda env bin directory — prefer the 'amr' env explicitly
+if [[ -d "/opt/conda/envs/amr/bin" ]]; then
+    CONDA_BIN="/opt/conda/envs/amr/bin"
+elif [[ -n "${CONDA_PREFIX:-}" && "$CONDA_PREFIX" == */envs/* ]]; then
     CONDA_BIN="$CONDA_PREFIX/bin"
 else
     CONDA_BIN="$(dirname "$(command -v python3 2>/dev/null || echo /usr/bin/python3)")"
@@ -30,6 +32,7 @@ MLST_BIN="${MLST_BIN:-${CONDA_BIN}/mlst}"
 export PERL5LIB="${CONDA_BIN}/../lib/perl5/site_perl:${CONDA_BIN}/../lib/perl5/vendor_perl"
 unset PERL_LOCAL_LIB_ROOT PERL_MB_OPT PERL_MM_OPT 2>/dev/null || true
 export PATH="${CONDA_BIN}:${PATH}"
+export CONDA_PREFIX="${CONDA_BIN%/bin}"
 OSTIR_BIN="${OSTIR_BIN:-ostir}"
 BPROM="${BPROM:-${SCRIPT_DIR}/bin/bprom}"
 BPROM_DATA="${BPROM_DATA:-${SCRIPT_DIR}/databases/bprom_data}"

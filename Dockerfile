@@ -51,7 +51,9 @@ RUN chmod +x annotate_minimal.sh run.sh && \
 RUN mkdir -p uploads
 
 # Environment variables for tool/database paths
-ENV AMR_MODELS_DIR=/opt/amr/models \
+# CONDA_PREFIX must point to the amr env so AMRFinderPlus finds its database
+ENV CONDA_PREFIX=/opt/conda/envs/amr \
+    AMR_MODELS_DIR=/opt/amr/models \
     AMR_UPLOAD_DIR=/opt/amr/uploads \
     POINTFINDER_DB=/opt/amr/databases/pointfinder_db \
     RESFINDER_DB=/opt/amr/databases/resfinder_db \
