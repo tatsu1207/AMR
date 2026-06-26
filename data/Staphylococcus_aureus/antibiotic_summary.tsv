@@ -1,0 +1,14 @@
+antibiotic	drug_class	n_total	n_resistant	n_susceptible
+ciprofloxacin	QUINOLONE	480	76	404
+clindamycin	LINCOSAMIDE	709	238	471
+doxycycline	TETRACYCLINE	106	38	68
+erythromycin	MACROLIDE	749	339	410
+gentamicin	AMINOGLYCOSIDE	583	112	471
+levofloxacin	QUINOLONE	442	145	297
+linezolid	OXAZOLIDINONE	531	31	500
+mupirocin	MUPIROCIN	345	51	294
+oxacillin	BETA-LACTAM	721	152	569
+penicillin	BETA-LACTAM	384	346	38
+tetracycline	TETRACYCLINE	765	94	671
+trimethoprim_sulfamethoxazole	TRIMETHOPRIM	657	61	596
+vancomycin	GLYCOPEPTIDE	580	72	508

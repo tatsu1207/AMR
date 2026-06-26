@@ -1,0 +1,14 @@
+antibiotic	drug_class	n_total	n_resistant	n_susceptible
+amikacin	AMINOGLYCOSIDE	702	324	378
+ampicillin_sulbactam	BETA-LACTAM	693	348	345
+ceftazidime	BETA-LACTAM	728	633	95
+ceftriaxone	BETA-LACTAM	727	682	45
+ciprofloxacin	QUINOLONE	754	660	94
+doripenem	BETA-LACTAM	187	46	141
+gentamicin	AMINOGLYCOSIDE	751	651	100
+imipenem	BETA-LACTAM	709	205	504
+levofloxacin	QUINOLONE	713	590	123
+meropenem	BETA-LACTAM	378	201	177
+tetracycline	TETRACYCLINE	739	546	193
+tobramycin	AMINOGLYCOSIDE	719	410	309
+trimethoprim_sulfamethoxazole	TRIMETHOPRIM	731	609	122
