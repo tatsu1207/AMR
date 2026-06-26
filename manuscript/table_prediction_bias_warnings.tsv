@@ -1,0 +1,61 @@
+species	antibiotic	drug_class	n_samples	n_R	n_S	R_pct	imbalance_ratio	cv_f1	concerns
+Acinetobacter baumannii	ceftriaxone	BETA-LACTAM	727	682	45	93.8	15.2:1	0.968447385921607	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates; Extreme imbalance (15:1): minority class predictions unreliable
+Acinetobacter baumannii	ciprofloxacin	QUINOLONE	754	660	94	87.5	7.0:1	0.9924467672332196	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates; High imbalance (7.0:1): minority class may be poorly learned
+Acinetobacter baumannii	ceftazidime	BETA-LACTAM	728	633	95	87.0	6.7:1	0.9685761300618945	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates; High imbalance (6.7:1): minority class may be poorly learned
+Acinetobacter baumannii	gentamicin	AMINOGLYCOSIDE	751	651	100	86.7	6.5:1	0.9825633658923483	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates; High imbalance (6.5:1): minority class may be poorly learned
+Acinetobacter baumannii	trimethoprim sulfamethoxazole	TRIMETHOPRIM	731	609	122	83.3	5.0:1	0.9193994601660144	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Acinetobacter baumannii	levofloxacin	QUINOLONE	713	590	123	82.7	4.8:1	0.9571085796987144	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Acinetobacter baumannii	tetracycline	TETRACYCLINE	739	546	193	73.9	2.8:1	0.9576921027642532	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Escherichia coli	cefazolin	BETA-LACTAM	530	475	55	89.6	8.6:1	0.9627134393601576	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates; High imbalance (8.6:1): minority class may be poorly learned
+Escherichia coli	trimethoprim	TRIMETHOPRIM	1522	1299	223	85.3	5.8:1	0.9888260619919343	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates; High imbalance (5.8:1): minority class may be poorly learned
+Escherichia coli	sulfonamides	SULFONAMIDE	1327	1044	283	78.7	3.7:1	0.9701095249491493	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Escherichia coli	sulfamethoxazole	SULFONAMIDE	191	126	65	66.0	1.9:1	0.9549948193324151	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Escherichia coli	levofloxacin	QUINOLONE	1049	675	374	64.3	1.8:1	0.9371360285540419	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Escherichia coli	ampicillin sulbactam	BETA-LACTAM	512	314	198	61.3	1.6:1	0.9283946078431372	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Escherichia coli	doripenem	BETA-LACTAM	115	31	84	27.0	2.7:1	0.5025974025974026	Low model performance (F1=0.503): model unreliable even on training distribution
+Escherichia coli	cefepime	BETA-LACTAM	1044	275	769	26.3	2.8:1	0.6149702252269957	Low model performance (F1=0.615): model unreliable even on training distribution
+Escherichia coli	piperacillin tazobactam	BETA-LACTAM	686	127	559	18.5	4.4:1	0.47330848456168156	Low model performance (F1=0.473): model unreliable even on training distribution
+Escherichia coli	trimethoprim sulfamethoxazole	TRIMETHOPRIM	4995	818	4177	16.4	5.1:1	0.92604849673512	High imbalance (5.1:1): minority class may be poorly learned
+Escherichia coli	kanamycin	AMINOGLYCOSIDE	1130	155	975	13.7	6.3:1	0.9182456140350878	High imbalance (6.3:1): minority class may be poorly learned
+Escherichia coli	ertapenem	BETA-LACTAM	1316	148	1168	11.2	7.9:1	0.7771550593655856	High imbalance (7.9:1): minority class may be poorly learned
+Escherichia coli	azithromycin	MACROLIDE	5314	587	4727	11.0	8.1:1	0.9469954097399562	High imbalance (8.1:1): minority class may be poorly learned
+Escherichia coli	nitrofurantoin	NITROFURANTOIN	405	42	363	10.4	8.6:1	0.07333333333333333	High imbalance (8.6:1): minority class may be poorly learned; Low model performance (F1=0.073): model unreliable even on training distribution
+Escherichia coli	nalidixic acid	QUINOLONE	4452	364	4088	8.2	11.2:1	0.8973280897259877	Moderate S-bias (<=10%R): model trained on mostly susceptible, may underperform on resistant-rich populations; Extreme imbalance (11:1): minority class predictions unreliable
+Escherichia coli	chloramphenicol	PHENICOL	4460	340	4120	7.6	12.1:1	0.7514572084285647	Moderate S-bias (<=10%R): model trained on mostly susceptible, may underperform on resistant-rich populations; Extreme imbalance (12:1): minority class predictions unreliable
+Escherichia coli	imipenem	BETA-LACTAM	573	39	534	6.8	13.7:1	0.7055921855921857	Moderate S-bias (<=10%R): model trained on mostly susceptible, may underperform on resistant-rich populations; Extreme imbalance (14:1): minority class predictions unreliable
+Klebsiella pneumoniae	colistin	COLISTIN	471	379	92	80.5	4.1:1	0.894898360504721	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Klebsiella pneumoniae	nitrofurantoin	NITROFURANTOIN	220	170	50	77.3	3.4:1	0.8779383617739782	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Klebsiella pneumoniae	chloramphenicol	PHENICOL	116	86	30	74.1	2.9:1	0.9596536796536796	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Klebsiella pneumoniae	cefotaxime	BETA-LACTAM	604	443	161	73.3	2.8:1	0.9830878618588116	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Klebsiella pneumoniae	ciprofloxacin	QUINOLONE	887	641	246	72.3	2.6:1	0.9505464593356259	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Klebsiella pneumoniae	doripenem	BETA-LACTAM	293	209	84	71.3	2.5:1	0.9057369743132646	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Klebsiella pneumoniae	cefoxitin	BETA-LACTAM	566	394	172	69.6	2.3:1	0.8844958236277385	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Klebsiella pneumoniae	ampicillin sulbactam	BETA-LACTAM	243	166	77	68.3	2.2:1	0.9631083550850773	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Klebsiella pneumoniae	ceftriaxone	BETA-LACTAM	1051	701	350	66.7	2.0:1	0.9285369812303932	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Klebsiella pneumoniae	levofloxacin	QUINOLONE	652	425	227	65.2	1.9:1	0.9191731568780777	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Klebsiella pneumoniae	imipenem	BETA-LACTAM	632	407	225	64.4	1.8:1	0.92797832031338	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Klebsiella pneumoniae	trimethoprim sulfamethoxazole	TRIMETHOPRIM	884	551	333	62.3	1.7:1	0.9199260053907942	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Klebsiella pneumoniae	minocycline	TETRACYCLINE	80	45	35	56.2	1.3:1	0.7759258440218193	Small training set (n=80): unreliable generalization
+Klebsiella pneumoniae	fosfomycin	FOSFOMYCIN	104	47	57	45.2	1.2:1	0.6649122807017543	Low model performance (F1=0.665): model unreliable even on training distribution
+Klebsiella pneumoniae	tigecycline	TETRACYCLINE	410	121	289	29.5	2.4:1	0.48027783607099483	Low model performance (F1=0.480): model unreliable even on training distribution
+Salmonella enterica	colistin	COLISTIN	1301	1000	301	76.9	3.3:1	0.9935158554419992	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates
+Salmonella enterica	sulfonamides	SULFONAMIDE	920	590	330	64.1	1.8:1	0.9654622586797525	Moderate R-bias (>=60%R): model may over-predict resistance for susceptible-rich populations
+Salmonella enterica	amoxicillin clavulanic acid	BETA-LACTAM	9030	1383	7647	15.3	5.5:1	0.8950336077480083	High imbalance (5.5:1): minority class may be poorly learned
+Salmonella enterica	ceftiofur	BETA-LACTAM	4405	622	3783	14.1	6.1:1	0.9657827026693988	High imbalance (6.1:1): minority class may be poorly learned
+Salmonella enterica	gentamicin	AMINOGLYCOSIDE	9902	1328	8574	13.4	6.5:1	0.8895575621511472	High imbalance (6.5:1): minority class may be poorly learned
+Salmonella enterica	ceftazidime	BETA-LACTAM	418	55	363	13.2	6.6:1	0.7376114140731831	High imbalance (6.6:1): minority class may be poorly learned
+Salmonella enterica	kanamycin	AMINOGLYCOSIDE	3794	460	3334	12.1	7.2:1	0.8245009782527447	High imbalance (7.2:1): minority class may be poorly learned
+Salmonella enterica	ceftriaxone	BETA-LACTAM	8993	1078	7915	12.0	7.3:1	0.9649985000674007	High imbalance (7.3:1): minority class may be poorly learned
+Salmonella enterica	nalidixic acid	QUINOLONE	9902	1153	8749	11.6	7.6:1	0.9776590157166748	High imbalance (7.6:1): minority class may be poorly learned
+Salmonella enterica	ciprofloxacin	QUINOLONE	9862	1127	8735	11.4	7.8:1	0.9472264547070495	High imbalance (7.8:1): minority class may be poorly learned
+Salmonella enterica	chloramphenicol	PHENICOL	10051	1099	8952	10.9	8.1:1	0.898342849507331	High imbalance (8.1:1): minority class may be poorly learned
+Salmonella enterica	cefoxitin	BETA-LACTAM	9210	787	8423	8.5	10.7:1	0.9191134130150111	Moderate S-bias (<=10%R): model trained on mostly susceptible, may underperform on resistant-rich populations; Extreme imbalance (11:1): minority class predictions unreliable
+Salmonella enterica	trimethoprim	TRIMETHOPRIM	648	54	594	8.3	11.0:1	0.7181380023485286	Moderate S-bias (<=10%R): model trained on mostly susceptible, may underperform on resistant-rich populations; Extreme imbalance (11:1): minority class predictions unreliable
+Staphylococcus aureus	penicillin	BETA-LACTAM	384	346	38	90.1	9.1:1	0.971340987099065	High R-bias (>=70%R): model may over-predict resistance for non-clinical isolates; High imbalance (9.1:1): minority class may be poorly learned
+Staphylococcus aureus	doxycycline	TETRACYCLINE	106	38	68	35.8	1.8:1	0.619791189202954	Low model performance (F1=0.620): model unreliable even on training distribution
+Staphylococcus aureus	ciprofloxacin	QUINOLONE	480	76	404	15.8	5.3:1	0.9465745007680493	High imbalance (5.3:1): minority class may be poorly learned
+Staphylococcus aureus	mupirocin	MUPIROCIN	345	51	294	14.8	5.8:1	0.7246702317290554	High imbalance (5.8:1): minority class may be poorly learned
+Staphylococcus aureus	vancomycin	GLYCOPEPTIDE	580	72	508	12.4	7.1:1	0.7762107999527355	High imbalance (7.1:1): minority class may be poorly learned
+Staphylococcus aureus	tetracycline	TETRACYCLINE	765	94	671	12.3	7.1:1	0.8310761752867016	High imbalance (7.1:1): minority class may be poorly learned
+Staphylococcus aureus	trimethoprim sulfamethoxazole	TRIMETHOPRIM	657	61	596	9.3	9.8:1	0.7059673659673659	Moderate S-bias (<=10%R): model trained on mostly susceptible, may underperform on resistant-rich populations; High imbalance (9.8:1): minority class may be poorly learned
+Staphylococcus aureus	linezolid	OXAZOLIDINONE	531	31	500	5.8	16.1:1	0.5713886113886114	Moderate S-bias (<=10%R): model trained on mostly susceptible, may underperform on resistant-rich populations; Extreme imbalance (16:1): minority class predictions unreliable; Low model performance (F1=0.571): model unreliable even on training distribution
