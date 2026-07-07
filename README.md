@@ -49,7 +49,7 @@ bash annotate_one.sh input.fasta results_dir 4
 ```
 
 This runs the 16-step pipeline:
-1. AMRFinderPlus (ARG detection + point mutations)
+1. AMRFinderPlus (ARG detection + point mutations via `--organism`)
 2. BPROM (promoter prediction)
 3. OSTIR (RBS / translation initiation rate)
 4. MobileElementFinder (IS elements)
@@ -63,11 +63,8 @@ This runs the 16-step pipeline:
 12. Codon adaptation index (CAI)
 13. GC content deviation
 14. MLST (sequence typing)
-15. *(Folded into Step 1 — PointFinder via AMRFinderPlus --organism)*
-16. IntegronFinder
-17. Gene synteny analysis
-
-> **Note:** Step 15 (PointFinder) is no longer executed separately; point mutation detection is handled by AMRFinderPlus `--organism` in Step 1. The pipeline has 16 active steps (17 numbered for historical compatibility).
+15. IntegronFinder
+16. Gene synteny analysis
 
 ### 2. Build feature matrix
 
@@ -139,7 +136,7 @@ All models use `class_weight='balanced'` and `random_state=42`. No hyperparamete
 
 - **Genome assemblies**: NCBI Sequence Read Archive (SRA) — accession list in `manuscript/table_S7_sra_accessions.tsv`
 - **Pre-trained models**: `models/` directory (107 RF models as joblib files)
-- **Feature matrices**: Available upon request or via the processed data release
+- **Feature matrices**: `data/<species>/feature_matrix.tsv.gz` (~111 features per isolate-antibiotic pair, with `antibiotic_summary.tsv` per species)
 
 ## Requirements
 
